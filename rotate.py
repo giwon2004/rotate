@@ -1,14 +1,25 @@
 import numpy as np
 size = 128
 
-def pixtocoord(i, j):
+def pixtocoord(i, j): # pixel (0,0) starting from left top -> coord (0,0) at the center
     return i-size//2+0.5, j+size//2-0.5
 
-def coordtopix(x, y):
+def coordtopix(x, y): # coord (0,0) at the center -> pixel (0,0) starting from left top
     return int(x)-size//2, int(y)+size//2
 
 def rotate(original_image, depth_map, Ax, Ay, dx, dy, dz, t, a):
-    
+    '''
+    input parameters:
+        original image : RGB image input
+        depth_map : D image input - after passing the depth estimation layer
+        Ax, Ay : Field(Angle) of View - two variables will be estimated by the layer
+        dx, dy, dz : camera moving at x, y, z-axes; z is the way the camera sees,
+                     and (x, y) is the image pixel (unit of depth = unit of pixel here)
+        t, a : theta, alpha for rotating camera
+
+    output parameters:
+        tr2_image: RGBD map on 2D image
+    '''
     cost = np.cos(t); sint = np.sin(t)
     cosa = np.cos(a); sina = np.sin(a)
     tanAx = np.tan(Ax); tanAy = np.tan(Ay)
